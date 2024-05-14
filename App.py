@@ -43,10 +43,7 @@ df = pd.DataFrame(gdf[['nm_mun', 'jurisdicao', 'nm_delegado']])
 gdf = gdf[['nm_mun', 'jurisdicao', 'nm_delegado', 'geometry']]
 # Add number of reference
 gdf['id_jurisdicao'] = pd.factorize(gdf['jurisdicao'])[0] + 1
-# Copy of 'gdf'
-gdf1 = gdf.copy()
-# Set index
-gdf1 = gdf1.set_index('nm_mun', inplace=True)
+
 
 # ---------- Streamlit App Code ----------
 
@@ -75,7 +72,7 @@ with sidebar_container:
         
         No mapa, ao passar o cursor do *mouse* sobre cada município, serão exibidas as informações de cada um.
 
-        Na última seção, Pesquisa no Mapa, é possível selecionar a opção de pesquisa de seu interesse e o município correspondente estará com seu limite destacado em vermelho no mapa.
+        Na última seção, **Pesquisa no Mapa**, é possível selecionar a opção de pesquisa de seu interesse e o município correspondente estará com seu limite destacado em vermelho no mapa.
         """
     )
     st.markdown("---")
@@ -160,13 +157,13 @@ with tab2:
         st.markdown('### Mapa de delegados por delegacia e município')
 
         # Create the map
-        fig = px.choropleth_mapbox(gdf1, 
-                                geojson=gdf1.geometry, 
-                                locations=gdf1.index,
+        fig = px.choropleth_mapbox(gdf, 
+                                geojson=gdf.geometry, 
+                                locations=gdf.index,
                                 color='id_jurisdicao', 
                                 color_continuous_scale='Portland',
                                 hover_name='jurisdicao', 
-                                hover_data=['nm_delegado'],
+                                hover_data=['nm_mun', 'nm_delegado'],
                                 mapbox_style='carto-positron', 
                                 center = {'lat': -31, 'lon': -53.5},
                                 zoom=5,
@@ -219,7 +216,7 @@ with tab3:
                                 color='id_jurisdicao', 
                                 color_continuous_scale='Portland',
                                 hover_name='jurisdicao', 
-                                hover_data=['nm_delegado'],
+                                hover_data=['nm_mun', 'nm_delegado'],
                                 mapbox_style='carto-positron', 
                                 center = {'lat': -31, 'lon': -53.5},
                                 zoom=5,
